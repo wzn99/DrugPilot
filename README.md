@@ -1,6 +1,8 @@
 # DrugPilot
 A LLM agent framework for drug discovery
+
 Optimizing the ReActAgent based on the Llama-Index framework, leveraging the reasoning capabilities of LLM in combination with eight tool functions to accomplish drug discovery tasks. 
+
 Users input textual descriptions, and DrugPilot returns the corresponding drug discovery task results.
 
 # Requirements for LLM agent
