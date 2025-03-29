@@ -23,6 +23,7 @@ Based on llama-index's ReActAgent, we have implemented a series of improvements:
 • **Enhanced `feedback mechanism`** tailored for drug discovery tasks, improving error detection in LLM reasoning and providing corrective feedback.
 • **Introduced a f`ocus mechanism`** to prevent LLMs from forgetting the original task in long conversations.
 • **Proposed the `memory pool` component**:  
+## Memory Pool
   • Solves the challenge of large-scale data transmission.  
   • Automatically extracts drug-related parameters from conversations and maintains them in a structured format for subsequent task usage.  
   • Provides an interface for users to efficiently view and modify parameters, enabling better control over the LLM's reasoning process. This allows users to more effectively guide and supervise the LLM's decision-making.
