@@ -5,10 +5,8 @@ from llama_index.core.tools import FunctionTool
 from llama_index.llms.ollama import Ollama
 from llama_index.core import PromptTemplate
 import pandas as pd
-from pprint import pprint
 # from llama_index.core.agent import ReActAgent
 
-from llama_index.core.agent.react.base import ReActAgent as OriginReActAgent
 from core.agent.ablation_mp.base import ReActAgent as ReActAgentAblationMp
 from core.agent.react.base import ReActAgent as DrugPilot
 
