@@ -1,0 +1,99 @@
+model_type: 0
+model_name: GraphMultiHead
+
+marker: single
+
+cuda_name: cuda:0
+
+work_dir: cls_bbbp
+batch_size:
+  train: 256
+  val: 256
+  test: 256
+lr: 0.001
+num_epoch: 150
+log_interval: 2
+split_type: scaffold
+seed: 0
+
+dataset_name: bbbp
+dataset_path: datasets/scaffold_0/finetune_set/bbbp.csv
+testset_path: datasets/scaffold_0/test_set/bbbp.csv
+cleanset_path: datasets/scaffold_0/test_set/bbbp_clean.csv
+predictset_path: datasets/scaffold_0/merged_training_set.csv
+to_fill_training_set_path: datasets/scaffold_0/to_fill_training_set/bbbp.csv
+
+# dataset_with_predictions: datasets/raw_data/molnet/filled_training_set/bbbp.csv
+# dataset_testing: datasets/raw_data/molnet/test_set/bbbp.csv
+# task_output_dims: [1, 1, 2, 27, 12, 617, 1, 1, 1]
+
+dataset_type:
+  scale: 1
+  select_type: zeroshot
+  # r3  three datasets are all random, and not mixed
+  # m2r train and val datasets are mixed, test dataset is random
+  # dataset_path: /home/lk/project/NCI60_dataset/normal_format
+  # dataset_path: /home/lk/project/NCI60_dataset/selected
+  # dataset_path: datasets/esol/normalized_esol.csv
+  train: 0.8
+  val: 0.1
+  test: 0.1
+
+
+
+model:
+
+  drug_module:
+    module_name:
+      - GATConv
+      - GCNConv
+    input_drug_feature_dim:  78
+    output_drug_feature_dim: 128
+    num_labels: 1 # vary with dataset
+    layer_num: 2
+
+    gnn_layers:
+      -
+        intput: 78
+        output: 78
+        dropout: 0.0
+        feature_pre_dropout: 0
+        heads: 10
+      -
+        intput: 780
+        output: 780
+        dropout: 0.0
+        feature_pre_dropout: 0
+
+
+    linear_layers:
+      -
+        operate_name: linear
+        param:
+          - 1560
+          - 500
+      -
+        operate_name: relu
+      -
+        operate_name: dropout
+        param: 0.5
+      -
+        operate_name: linear
+        param:
+          - 500
+          - 128
+
+      # -
+      #   operate_name: linear
+      #   param:
+      #     - 1800
+      #     - 1500
+      # -
+      #   operate_name: relu
+      # -
+      #   operate_name: dropout
+      #   param: 0.2
+
+    graph_pooling: max_mean
+    dropout: 0.5
+

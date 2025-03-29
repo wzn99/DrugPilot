@@ -1,0 +1,134 @@
+data:
+  data: GDSCv2
+  # data: ['GDSCv2', 'QM9']
+  # dir: '/home/nas/lk/mol_generate/gdscv2_GDSS/'
+  dir: 'data/'
+  batch_size: 128
+  max_node_num: 100
+  max_feat_num: 10
+  init: atom
+
+# ckpt: Feb07-06:39:09_200
+# #50%
+
+# ckpt: Mar12-15:13:52_95
+# #30%
+
+
+# ckpt: Mar15-01:03:29
+# #50%
+
+ckpt: Apr03-06:33:01_163
+# baseline
+
+# ckpt: May10-03:30:34_99
+
+sde:
+  x: 
+    type: VP
+    beta_min: 0.1
+    beta_max: 1.0
+    num_scales: 1000
+  adj:
+    type: VE
+    beta_min: 0.2
+    beta_max: 1.0
+    num_scales: 1000
+
+model:
+  x: ScoreNetworkX
+  adj: ScoreNetworkA
+  conv: GCN
+  num_heads: 4
+  depth: 2
+  adim: 16
+  nhid: 16
+  num_layers: 3
+  num_linears: 3
+  c_init: 2
+  c_hid: 8
+  c_final: 4
+
+
+train:
+  task: drp
+  name: xxxxxxx
+  num_epochs: 300
+  save_interval: 5
+  print_interval: 5
+  reduce_mean: False
+  lr: 0.003
+  lr_schedule: True
+  ema: 0.999
+  weight_decay: 0.0001
+  grad_norm: 1.0
+  lr_decay: 0.999
+  eps: 1.0e-5
+
+
+sampler:
+  predictor: Reverse
+  corrector: Langevin
+  snr: 0.2
+  scale_eps: 0.7
+  n_steps: 1
+
+sample:
+  use_ema: False
+  noise_removal: True
+  probability_flow: False
+  eps: 1.0e-4
+  seed: 42
+
+controller:
+  type: text
+  base_model: TransEDRP
+  # TransEDRP, DLE
+  cell_csv_path: ./algorithm/drug_cell_response_regression_optimization/data/PANCANCER_Genetic_feature.csv
+  pth_dir: ./algorithm/drug_cell_response_regression_optimization/data/CLDR_Mar12-07:01:52.pth
+  cldr_ckpt: ./algorithm/drug_cell_response_regression_optimization/checkpoints/GDSCv2/CLDR_Mar12-07:01:52.pth
+  config_diff_steps: 100
+
+  label: 
+    # cell: 687799
+    cell: 906869
+    ic50: 0.35
+    gt: B([C@H](CC(C)C)NC(=O)[C@H](CC1=CC=CC=C1)NC(=O)C2=NC=CN=C2)(O)O
+    mask: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+
+    # cell: 687799
+    # ic50: 0.35
+    # gt: COCCOC1=C(C=C2C(=C1)C(=NC=N2)NC3=CC=CC(=C3)C#C)OCCOC
+    # mask: [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+    
+    # mask: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
+    # gt: B([C@H](CC(C)C)NC(=O)[C@H](CC1=CC=CC=C1)NC(=O)C2=NC=CN=C2)(O)O
+    # mask: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1]
+
+  model:
+
+    drug_module: 
+      fc_1_dim: 512
+      fc_2_dim: 128
+      dropout: 0.5
+      transformer_dropout: 0.5
+
+    cell_module: 
+      module_name: Transformer
+      input_cell_feature_dim: 735
+      fc_1_dim: 128
+      layer_num: 3
+      layer_hyperparameter:
+        - 7
+        - 7
+        - 7
+      transformer_dropout: 0.5
+
+
+    fusion_module:
+      fc_1_dim: 1024
+      fc_2_dim: 256
+      fc_3_dim: 1
+      dropout: 0.5
+      transformer_dropout: 0.5
+      fusion_mode: concat
