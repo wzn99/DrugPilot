@@ -5,6 +5,28 @@ Optimizing the ReActAgent based on the Llama-Index framework, leveraging the rea
 
 Users input textual descriptions, and DrugPilot returns the corresponding drug discovery task results.
 
+# Tool Functions 
+In DrugPilot/baishenglai_backend-main, we have implemented algorithms for eight types of drug discovery tasks, covering the complete process of drug discovery.
+- drug_cell_response_regression_prediction
+- drug_cell_response_regression_optimization
+- drug_drug_response_prediction
+- drug_generation
+- drug_property_prediction
+- drug_synthesis_design
+- drug_target_affinity_classification_prediction
+- drug_target_affinity_regression_prediction
+
+# Agent FrameWork
+Based on llama-index's ReActAgent, we have implemented a series of improvements:  
+
+• **Optimized `output_parser`** for better parsing of LLM outputs.  
+• **Enhanced feedback mechanism** tailored for drug discovery tasks, improving error detection in LLM reasoning and providing corrective feedback.  
+• **Introduced a focus mechanism** to prevent LLMs from forgetting the original task in long conversations.  
+• **Proposed a Memory Pool component**:  
+  • Solves the challenge of large-scale data transmission.  
+  • Automatically extracts drug-related parameters from conversations and maintains them in a structured format for subsequent task usage.  
+  • Provides an interface for users to efficiently view and modify parameters, enabling better control over the LLM's reasoning process. This allows users to more effectively guide and supervise the LLM's decision-making.
+
 # Requirements for LLM agent
 | Package Name                                      | Version         |  
 |--------------------------------------------------|---------------|  
