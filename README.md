@@ -20,8 +20,12 @@ In DrugPilot/baishenglai_backend-main, we have implemented algorithms for eight 
 Based on llama-index's ReActAgent, we have implemented a series of improvements:  
 
 • **Optimized `output_parser`** for better parsing of LLM outputs.
+
 • **Enhanced `feedback mechanism`** tailored for drug discovery tasks, improving error detection in LLM reasoning and providing corrective feedback.
+
 • **Introduced a f`ocus mechanism`** to prevent LLMs from forgetting the original task in long conversations.
+
+
 • **Proposed the `memory pool` component**:  
 ## Memory Pool
   • Solves the challenge of large-scale data transmission.  
